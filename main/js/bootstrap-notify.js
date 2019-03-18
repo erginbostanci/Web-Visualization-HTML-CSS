@@ -1,17 +1,17 @@
-(function (factory) {
+(function (main) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(['jquery'], factory);
+		define(['jquery'], main);
 	} else if (typeof exports === 'object') {
 		// Node/CommonJS
-		factory(require('jquery'));
+		main(require('jquery'));
 	} else {
 		// Browser globals
-		factory(jQuery);
+		main(jQuery);
 	}
 }(function ($) {
 	// Create the defaults once
-	var defaults = {
+	var wont_change = {
 		element: 'body',
 		position: null,
 		type: "info",
@@ -43,15 +43,15 @@
 	};
 
 	String.format = function () {
-		var str = arguments[0];
+		var string_used = arguments[0];
 		for (var i = 1; i < arguments.length; i++) {
-			str = str.replace(RegExp("\\{" + (i - 1) + "\\}", "gm"), arguments[i]);
+			string_used = string_used.replace(RegExp("\\{" + (i - 1) + "\\}", "gm"), arguments[i]);
 		}
-		return str;
+		return string_used;
 	};
 
-	function isDuplicateNotification(notification) {
-		var isDupe = false;
+	function Double_Notofications(notification) {
+		var is_double = false;
 
 		$('[data-notify="container"]').each(function (i, el) {
 			var $el = $(el);
@@ -61,23 +61,23 @@
 			// The input string might be different than the actual parsed HTML string!
 			// (<br> vs <br /> for example)
 			// So we have to force-parse this as HTML here!
-			var isSameTitle = title === $("<div>" + notification.settings.content.title + "</div>").html().trim();
-			var isSameMsg = message === $("<div>" + notification.settings.content.message + "</div>").html().trim();
-			var isSameType = $el.hasClass('alert-' + notification.settings.type);
+			var Same_Title = title === $("<div>" + notification.settings.content.title + "</div>").html().trim();
+			var Same_Msg = message === $("<div>" + notification.settings.content.message + "</div>").html().trim();
+			var Same_Type = $el.hasClass('alert-' + notification.settings.type);
 
 			if (isSameTitle && isSameMsg && isSameType) {
 				//we found the dupe. Set the var and stop checking.
-				isDupe = true;
+				is_double = true;
 			}
-			return !isDupe;
+			return !is_double;
 		});
 
-		return isDupe;
+		return is_double;
 	}
 
 	function Notify(element, content, options) {
 		// Setup Content of Notify
-		var contentObj = {
+		var cont_Object = {
 			content: {
 				message: typeof content === 'object' ? content.message : content,
 				title: content.title ? content.title : '',
